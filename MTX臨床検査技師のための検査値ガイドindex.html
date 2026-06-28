@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>メトトレキサート 臨床検査技師のための検査値ガイド</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #F0F4F8;
+    --surface: #FFFFFF;
+    --surface-alt: #EBF2FF;
+    --ink: #1A2535;
+    --ink-muted: #5A6A80;
+    --accent: #1F6FEB;
+    --accent-light: #D8E8FF;
+    --warn: #D97706;
+    --warn-light: #FEF3C7;
+    --danger: #DC2626;
+    --danger-light: #FEE2E2;
+    --ok: #059669;
+    --ok-light: #D1FAE5;
+    --border: #D0DCF0;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Noto Sans JP', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: var(--sans);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 24px 16px 60px;
+  }
+
+  /* ---- HEADER ---- */
+  .page-header {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(31,111,235,0.18);
+  }
+  .drug-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #7EB3FF;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .page-header .subtitle {
+    font-size: 12px;
+    color: #A0B8D8;
+    line-height: 1.6;
+  }
+  .meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    color: #C8DEFF;
+    font-family: var(--mono);
+  }
+
+  /* ---- SECTION ---- */
+  .section {
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-alt);
+  }
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+  .section-tag.warn    { background: var(--warn); }
+  .section-tag.danger  { background: var(--danger); }
+  .section-tag.ok      { background: var(--ok); }
+  .section-tag.neutral { background: #64748B; }
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .section-body {
+    padding: 16px 18px;
+  }
+
+  /* ---- MECH BOX ---- */
+  .mech-box {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: #1A3A70;
+    line-height: 1.6;
+  }
+  .mech-box .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+
+  /* ---- TEST CARD ---- */
+  .test-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .test-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #FAFBFD;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .test-name {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ink);
+    flex: 1;
+    min-width: 140px;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-up      { background: #DCFCE7; color: #166534; }
+  .badge-down    { background: #DBEAFE; color: #1E40AF; }
+  .badge-caution { background: #FEF3C7; color: #92400E; }
+  .badge-watch   { background: #FEE2E2; color: #991B1B; }
+  .badge-neutral { background: #F3F4F6; color: #374151; border: 1px solid #D1D5DB; }
+
+  .test-card-body {
+    padding: 10px 14px;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: #2A3A50;
+  }
+  .test-card-body p { margin-bottom: 6px; }
+  .test-card-body p:last-child { margin-bottom: 0; }
+
+  .interpret-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .interpret-chip {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    line-height: 1.4;
+  }
+  .chip-ok   { background: var(--ok-light);   color: #065F46; }
+  .chip-warn { background: var(--warn-light);  color: #78350F; }
+  .chip-bad  { background: var(--danger-light); color: #7F1D1D; }
+
+  /* ---- KEYPOINT ---- */
+  .keypoint {
+    background: var(--warn-light);
+    border: 1px solid #FCD34D;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #78350F;
+    line-height: 1.6;
+  }
+  .keypoint .kp-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--warn);
+    margin-bottom: 3px;
+  }
+
+  /* ---- SUMMARY TABLE ---- */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .summary-table th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  .summary-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .summary-table tr:nth-child(even) td { background: #F8FAFC; }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .eff  { color: var(--accent);  font-weight: 700; }
+  .side { color: var(--danger);  font-weight: 700; }
+  .both { color: var(--warn);    font-weight: 700; }
+
+  /* ---- SOURCE ---- */
+  .source-list {
+    list-style: none;
+    font-size: 11px;
+    color: var(--ink-muted);
+    line-height: 1.8;
+  }
+  .source-list li::before {
+    content: '—';
+    margin-right: 6px;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  .note {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-style: italic;
+    margin-top: 4px;
+  }
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 14px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="page-header">
+  <div class="drug-label">葉酸拮抗型 csDMARD / Methotrexate</div>
+  <h1>メトトレキサート（リウマトレックス）検査値ガイド<br>
+    <span style="font-size:15px;font-weight:400;color:#A0C0F0;">臨床検査技師のための機序・解釈・報告ポイント</span>
+  </h1>
+  <div class="subtitle">
+    関節リウマチ アンカードラッグ ／ 国内承認：1999年8月<br>
+    リウマトレックスカプセル2mg インタビューフォーム（第4版, 2024年2月）＋ MTX使用と診療の手引き2023年版（日本リウマチ学会）に基づく
+  </div>
+  <div class="meta-pills">
+    <span class="pill">葉酸拮抗（DHFR阻害）</span>
+    <span class="pill">アデノシン放出促進</span>
+    <span class="pill">2mg カプセル</span>
+    <span class="pill">週1回間欠投与（6〜16mg/週）</span>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 0: 作用機序と検査値への影響 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">MECHANISM</span>
+    <span class="section-title">まず理解しておく作用機序と検査値への影響の全体像</span>
+  </div>
+  <div class="section-body">
+    <div class="mech-box">
+      <div class="label">①葉酸拮抗作用（DHFR阻害）</div>
+      ジヒドロ葉酸還元酵素（DHFR）を阻害 → テトラヒドロ葉酸（活性型葉酸）産生↓ → DNA合成・細胞分裂を抑制。<br>
+      ⚠ <strong>造血細胞・消化管粘膜など増殖速度の高い細胞に影響が出やすい</strong> → 血液毒性・消化管障害の背景機序。MCVの上昇（大球性変化）は葉酸拮抗の早期指標となりうる。
+    </div>
+    <div class="mech-box" style="border-color:var(--ok);background:var(--ok-light);color:#064E3B;">
+      <div class="label" style="color:var(--ok);">②アデノシン放出促進（抗炎症作用）</div>
+      AICAR transformylaseの阻害 → 細胞外アデノシン増加 → 好中球遊走・炎症性サイトカイン産生・血管新生を抑制 → 関節炎の活動性が低下。<br>
+      → CRP・ESR・MMP-3の低下は<strong>この機序による治療効果の反映</strong>として解釈する。
+    </div>
+    <div class="mech-box" style="border-color:var(--warn);background:var(--warn-light);color:#78350F;">
+      <div class="label" style="color:var(--warn);">③肝臓・腎臓との関係</div>
+      MTXは主に<strong>腎臓から未変化体で排泄（尿中69.5%）</strong>される。腎機能が低下するとMTXが体内に蓄積し、骨髄抑制・肝障害など全副作用リスクが急激に増大。アルブミン低下 → 遊離型MTX増加 → 同様の毒性増強。
+    </div>
+    <p style="font-size:12px;color:var(--ink-muted);">→ 検査値の変動には<strong>「治療効果として動く炎症指標の改善」</strong>と<strong>「薬の毒性として動く血液・肝・腎指標の悪化」</strong>が混在する。週1回投与であることを念頭に、変動の文脈を判断することが臨床検査技師の報告の要点となる。</p>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 1: 効果評価 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag ok">EFFICACY</span>
+    <span class="section-title">治療効果を評価する検査とその解釈</span>
+  </div>
+  <div class="section-body">
+
+    <!-- CRP / ESR -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">CRP・ESR（赤血球沈降速度）</span>
+        <span class="badge badge-down">低下＝改善</span>
+        <span class="badge badge-caution">主要炎症指標</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box" style="margin-bottom:8px;">
+          <div class="label">なぜ両方測るか</div>
+          CRPは急性相タンパクとして炎症に迅速に反応（数時間〜1日）。ESRはフィブリノゲン増加を反映し変動が緩やか（数日〜週単位）。DAS28スコア算出にはCRP版とESR版の2種類が存在し、どちらが使われているか把握しておくと依頼の意図が分かりやすい。
+        </div>
+        <p><strong>モニタリング頻度（手引き2023年版）：</strong>MTX開始後あるいは増量後3カ月以内は2〜4週ごと、以降は4〜12週ごと。</p>
+        <p class="note">⚠ MTX投与中に炎症改善なくCRPが上昇している場合、疾患活動性の再燃のほか<strong>感染症（日和見感染を含む）</strong>の可能性も高い。CRP上昇を見たら単純に「疾患悪化」とは即断せず、臨床側との情報共有が有用。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-ok">低下・陰性化 → 治療奏効</span>
+          <span class="interpret-chip chip-warn">横ばい → 増量・他薬追加を検討</span>
+          <span class="interpret-chip chip-bad">再上昇 → 再燃 or 感染症を鑑別</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MMP-3 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">MMP-3（マトリックスメタロプロテアーゼ-3）</span>
+        <span class="badge badge-down">低下＝改善</span>
+        <span class="badge badge-neutral">12週ごと算定</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box" style="margin-bottom:8px;">
+          <div class="label">何を反映するか</div>
+          滑膜細胞が産生する軟骨分解酵素。CRPが陰性化していてもMMP-3が高値の場合は滑膜炎が持続している可能性がある。DAS28-CRP・腫脹関節数との相関が報告されており（安田・小原, 昭和大学藤が丘病院, 臨床リウマチ Vol.24 No.2）、<strong>関節破壊リスクの補助的指標</strong>として位置付けられる。
+        </div>
+        <p><strong>保険上の注意：</strong>MMP-3の算定は<strong>12週（約3カ月）ごとまで</strong>しか認められていない。頻回な依頼が来た場合は査定対象になる可能性があるため、依頼側への情報提供として把握しておく価値がある。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-ok">低下継続 → 滑膜炎の鎮静化</span>
+          <span class="interpret-chip chip-warn">CRP正常化後も高値持続 → 画像評価（X線・エコー）と合わせて判断</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RF -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">RF（リウマトイド因子）・抗CCP抗体</span>
+        <span class="badge badge-down">緩徐に低下</span>
+        <span class="badge badge-neutral">24〜52週ごと</span>
+      </div>
+      <div class="test-card-body">
+        <p>炎症指標（CRP・ESR）と異なり、免疫学的指標は治療効果の反映が遅い。投与開始から数カ月〜1年以上かけて緩徐に低下することがある。短期間での評価は意義が低い。</p>
+        <p>抗CCP抗体は予後不良因子として投与前スクリーニングで評価されるが、治療効果モニタリングとしての頻回測定は通常行わない。</p>
+      </div>
+    </div>
+
+    <!-- HAQ-DI / 関節X線 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">関節単純X線（手・足部）/ HAQ-DI</span>
+        <span class="badge badge-caution">年1回 / 6〜12カ月ごと</span>
+      </div>
+      <div class="test-card-body">
+        <p>骨びらん・関節裂隙狭小化の進行抑制をmSharp法等で評価。有効な治療下では骨破壊進行が抑制される（構造的寛解）。</p>
+        <p>HAQ-DI（Health Assessment Questionnaire Disability Index）は患者自己申告型の身体機能評価。検査室からの直接的関与は少ないが、検査値改善と身体機能改善のタイムラグを理解しておくと全体像が把握しやすい。</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== SECTION 2: 副作用評価 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag danger">SAFETY</span>
+    <span class="section-title">副作用を評価する検査・発現傾向・判断基準</span>
+  </div>
+  <div class="section-body">
+    <p style="font-size:12px;color:var(--ink-muted);margin-bottom:12px;">★ 発現傾向はリウマトレックスIF（第4版）・MTX診療手引き2023年版・大阪大学呼吸器免疫内科資料より。重大な副作用は特に注意。</p>
+
+    <!-- 骨髄抑制 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">末梢血液検査（CBC）/ WBC・好中球・RBC・PLT・MCV</span>
+        <span class="badge badge-watch">重大 死亡報告34.6%が血液障害</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box" style="border-color:var(--danger);background:var(--danger-light);color:#7F1D1D;">
+          <div class="label" style="color:var(--danger);">骨髄抑制の機序</div>
+          DHFR阻害 → 造血幹細胞のDNA合成障害 → 汎血球減少・無顆粒球症。葉酸の消耗とMTX蓄積が原因。腎機能低下・低アルブミン血症があると急激に進行しうる。
+        </div>
+        <p><strong>国内死亡報告（2012年まで、MTX適正使用情報Vol.18 / 大阪大学）：</strong>MTX使用RA患者465例の死亡のうち<strong>血液障害161例（34.6%）</strong>が最多。汎血球減少97例、骨髄抑制39例、白血球減少18例など。</p>
+        <p><strong>MCVに注目：</strong>葉酸拮抗により赤血球の大球性変化（MCV上昇）が骨髄抑制よりも早期に出現することがある。葉酸製剤（ロイコボリン等）を並行して処方されていることも多い。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-warn">WBC &lt; 4,000/mm³ → 慎重経過観察</span>
+          <span class="interpret-chip chip-bad">WBC &lt; 3,000/mm³ または PLT &lt; 50,000/mm³ → 禁忌水準・緊急報告</span>
+        </div>
+        <div class="keypoint">
+          <div class="kp-label">REPORTING POINT</div>
+          前駆症状として「発熱・咽頭痛・インフルエンザ様症状」が先行することがある旨、添付文書に記載あり。WBC急低下時は感染症の合併も念頭に置いた情報提供が有用。
+        </div>
+        <p class="note">モニタリング頻度：開始・増量後6カ月以内は毎月、安定後は3カ月ごと（MTX手引き2023）</p>
+      </div>
+    </div>
+
+    <!-- 肝障害 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">肝機能（AST・ALT・ALP・γGTP・アルブミン）</span>
+        <span class="badge badge-watch">重大 頻度高い副作用</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box" style="border-color:var(--danger);background:var(--danger-light);color:#7F1D1D;">
+          <div class="label" style="color:var(--danger);">肝障害の機序</div>
+          MTXが肝細胞内でポリグルタミン酸化されて蓄積 → 直接的な肝細胞毒性 → AST・ALT上昇。長期投与では肝線維化・肝硬変のリスクがある。飲酒との相乗効果が顕著。
+        </div>
+        <p><strong>臨床試験データ（リウマトレックスIF）：</strong>国内臨床試験（204例）で臨床検査値異常発現率は<strong>23.8%（15/63例）</strong>。最多は肝機能関連（ALT・AST・ALP上昇）。</p>
+        <p><strong>アルブミンの重要性：</strong>アルブミン低下（特に&lt;3.0 g/dL）はMTX遊離型増加につながり、毒性リスクの直接的指標になる。MTX使用手引き2023では「低アルブミン血症は慎重投与基準」として明示されている。</p>
+        <p><strong>HBV・HCVキャリアの注意：</strong>MTX投与中および投与終了後も肝炎ウイルスマーカー（HBs抗原・HBc抗体・HBV-DNA等）のモニタリングが必要。HBV再活性化による重篤な肝炎・死亡例が報告されている（添付文書）。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-warn">AST/ALT が基準値上限の2倍超 → 減量・中止検討の目安</span>
+          <span class="interpret-chip chip-bad">急激な肝機能悪化 + アルブミン低下 → 毒性増強リスクとして緊急対応</span>
+        </div>
+        <p class="note">γGTPは飲酒（アルコール）でも上昇するため、問診情報との照合が重要。</p>
+      </div>
+    </div>
+
+    <!-- 腎機能 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">腎機能（BUN・Cr・eGFR）/ 尿一般検査</span>
+        <span class="badge badge-watch">重大 毒性増強の引き金</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box">
+          <div class="label">腎機能低下がなぜ危険か</div>
+          MTXは腎排泄（尿中69.5%）のため、eGFR低下 → MTX蓄積 → 骨髄抑制・肝障害などあらゆる副作用が急速に増悪する。「腎機能が落ちると全ての副作用が激化する」という連鎖を理解しておくことが重要。
+        </div>
+        <p><strong>投与禁忌水準（MTX手引き2023）：</strong>GFR &lt; 30 mL/分/1.73m² は投与禁忌の目安。GFR &lt; 60 mL/分/1.73m² でも慎重投与とされ低用量から開始。</p>
+        <p>尿一般検査（蛋白・潜血）も腎障害の早期検出に使用。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-warn">eGFR 30〜60 → 慎重投与・頻回モニタリング</span>
+          <span class="interpret-chip chip-bad">eGFR &lt; 30 または急激なCr上昇 → 禁忌水準・緊急報告</span>
+        </div>
+        <p class="note">脱水・NSAIDs併用・造影剤使用などで腎機能が一時的に悪化した際も、MTX蓄積リスクとして臨床側に伝えることが有用。</p>
+      </div>
+    </div>
+
+    <!-- 間質性肺炎 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">KL-6・SP-D / 胸部X線・胸部CT</span>
+        <span class="badge badge-watch">重大 死亡報告28.2%が肺障害</span>
+      </div>
+      <test-card-body class="test-card-body">
+        <div class="mech-box" style="border-color:var(--danger);background:var(--danger-light);color:#7F1D1D;">
+          <div class="label" style="color:var(--danger);">MTX肺炎の特徴</div>
+          過敏反応が主な発症機序と考えられているが詳細は不明。<strong>用量非依存性</strong>（少量でも発症しうる）。国内調査では<strong>発症の75%が服用開始半年以内</strong>に集中しているが、数年〜十数年後の発症例も存在する（日本呼吸器学会 薬剤性肺障害手引き2013）。
+        </div>
+        <p><strong>国内死亡報告（大阪大学）：</strong>死亡465例中<strong>肺障害131例（28.2%）</strong>、うち間質性肺炎120例。血液障害に次いで多い。</p>
+        <p><strong>リスク因子：</strong>60歳以上・胸膜病変・低アルブミン血症・糖尿病・既存の肺病変（Ann Intern Med 1997;127:356-64）。</p>
+        <p><strong>KL-6・SP-Dの位置付け：</strong>MTX手引き2023では「参考程度にとどめる」と記載されており、スクリーニングの主体は<strong>症状（発熱・乾性咳嗽・呼吸困難）と胸部画像</strong>にある。KL-6高値は情報提供として有用だが単独での中止判断根拠にはしない。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-warn">KL-6・SP-D上昇 → 参考情報として報告、画像評価を促す</span>
+          <span class="interpret-chip chip-bad">38℃以上の発熱 + KL-6急上昇 → MTX肺炎を積極的に疑う</span>
+        </div>
+        <div class="keypoint">
+          <div class="kp-label">REPORTING POINT</div>
+          MTX投与中の発熱・呼吸器症状時にCRPが上昇していた場合、<strong>感染性肺炎・ニューモシスティス肺炎・MTX肺炎の三者鑑別</strong>が必要になる。β-Dグルカン（ニューモシスティス肺炎）などの同時依頼も念頭に。
+        </div>
+        <p class="note">胸部X線は年1回の定期モニタリングとして依頼される。</p>
+      </test-card-body>
+    </div>
+
+    <!-- 感染症 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">感染症マーカー（β-Dグルカン・CMV抗原・結核関連）</span>
+        <span class="badge badge-watch">重大 死亡報告17.8%が感染症</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box" style="border-color:var(--warn);background:var(--warn-light);color:#78350F;">
+          <div class="label" style="color:var(--warn);">免疫抑制と日和見感染</div>
+          MTXの免疫抑制作用により、通常では発症しない病原体による日和見感染症リスクが上昇。特にニューモシスティス肺炎・サイトメガロウイルス感染症・帯状疱疹・非結核性抗酸菌症（MAC）が重要。
+        </div>
+        <p><strong>国内死亡報告（大阪大学）：</strong>死亡465例中感染症83例（17.8%）。ニューモシスティス肺炎25例、肺炎19例、敗血症11例など。</p>
+        <p><strong>投与前スクリーニング：</strong>結核（Tスポット・ツベルクリン反応・胸部X線）、HBs抗原・HBc抗体・HBs抗体、HCV抗体は投与前に必須評価。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-bad">β-Dグルカン上昇 + 発熱・呼吸器症状 → ニューモシスティス肺炎として対応</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- リンパ増殖性疾患 -->
+    <div class="test-card">
+      <div class="test-card-head">
+        <span class="test-name">可溶性IL-2受容体（sIL-2R）/ LDH・CBC</span>
+        <span class="badge badge-caution">重大 平均7年後に発症</span>
+      </div>
+      <div class="test-card-body">
+        <div class="mech-box">
+          <div class="label">リンパ増殖性疾患（LPD）のリスク</div>
+          MTX投与中のEBV関連リンパ増殖性疾患（悪性リンパ腫等）。MTX中止で自然退縮する例があることが特徴。60〜70歳代の女性に多く、MTX開始から発症までは平均7年（範囲は広い）とされる（ゼルヤンツ・LPD資料）。
+        </div>
+        <p><strong>初発症状と検査：</strong>リンパ節腫大が最多。発熱・寝汗・体重減少（B症状）が約30%に出現。検査上では<strong>関節症状の増悪を伴わないCRP上昇・sIL-2R高値</strong>が手がかりとなる。</p>
+        <p><strong>sIL-2Rの解釈注意点：</strong>炎症でも上昇するため、<strong>関節炎の活動性が落ち着いているにもかかわらずsIL-2Rが高値</strong>という乖離パターンがLPDを疑う重要な手がかりになる。</p>
+        <div class="interpret-row">
+          <span class="interpret-chip chip-warn">sIL-2R高値 + 関節炎が落ち着いている → LPDの可能性を情報提供</span>
+          <span class="interpret-chip chip-bad">LDH上昇 + リンパ球増多 + sIL-2R高値 → 悪性リンパ腫として精査</span>
+        </div>
+        <p class="note">単独では解釈困難なため、他の指標との組合せと臨床情報を合わせて報告することが重要。</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== SECTION 3: 投与前スクリーニング ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag warn">PRE-TREATMENT</span>
+    <span class="section-title">投与開始前に依頼される検査（スクリーニング）</span>
+  </div>
+  <div class="section-body">
+    <p style="font-size:12px;color:var(--ink-muted);margin-bottom:12px;">初回投与前にまとめて依頼が来ることが多い。MTX手引き2023年版より。</p>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>検査カテゴリ</th>
+          <th>主な項目</th>
+          <th>目的</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>末梢血液検査</td>
+          <td>CBC（白血球分画・MCV含む）</td>
+          <td>骨髄抑制ベースライン確認。WBC&lt;3,000・PLT&lt;50,000は禁忌の目安</td>
+        </tr>
+        <tr>
+          <td>炎症マーカー</td>
+          <td>CRP・ESR</td>
+          <td>疾患活動性ベースライン</td>
+        </tr>
+        <tr>
+          <td>生化学</td>
+          <td>AST・ALT・ALP・アルブミン・BUN・Cr・eGFR・血糖</td>
+          <td>肝・腎機能の禁忌水準確認。アルブミン低値は慎重投与の目安</td>
+        </tr>
+        <tr>
+          <td>尿検査</td>
+          <td>尿一般（蛋白・潜血・沈渣）</td>
+          <td>腎障害・血尿のベースライン</td>
+        </tr>
+        <tr>
+          <td>免疫血清</td>
+          <td>RF・抗CCP抗体</td>
+          <td>診断確認・予後不良因子評価</td>
+        </tr>
+        <tr>
+          <td>感染症スクリーニング</td>
+          <td>HBs抗原・HBc抗体・HBs抗体・HCV抗体</td>
+          <td>HBV再活性化リスク評価（必須）。HBVキャリアはMTX極力避ける</td>
+        </tr>
+        <tr>
+          <td>結核スクリーニング</td>
+          <td>QuantiFERON（またはTスポット）・胸部X線</td>
+          <td>潜在性結核感染の除外。陽性ならINH予防投与を先行</td>
+        </tr>
+        <tr>
+          <td>画像</td>
+          <td>胸部X線・手足部関節X線</td>
+          <td>間質性肺炎の既存病変確認。骨破壊ベースライン評価</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 4: 一覧まとめ ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">SUMMARY</span>
+    <span class="section-title">検査項目・目的・変動方向・報告ポイント 一覧</span>
+  </div>
+  <div class="section-body">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>検査項目</th>
+          <th>目的区分</th>
+          <th>変動方向</th>
+          <th>報告・解釈のポイント</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CRP・ESR</strong></td>
+          <td><span class="eff">効果</span></td>
+          <td>↓ 改善で低下</td>
+          <td>DAS28算出に使用。上昇時は再燃 vs 感染の鑑別が必要</td>
+        </tr>
+        <tr>
+          <td><strong>MMP-3</strong></td>
+          <td><span class="eff">効果</span></td>
+          <td>↓ 改善で低下</td>
+          <td>滑膜炎指標。算定は12週ごとまで（保険制限あり）</td>
+        </tr>
+        <tr>
+          <td><strong>RF・抗CCP抗体</strong></td>
+          <td><span class="eff">効果</span></td>
+          <td>↓ 緩徐に低下</td>
+          <td>短期での変動は小さい。24〜52週ごとの評価</td>
+        </tr>
+        <tr>
+          <td><strong>関節X線</strong></td>
+          <td><span class="eff">効果</span></td>
+          <td>進行抑制を確認</td>
+          <td>骨びらん・関節裂隙の変化を年1回評価</td>
+        </tr>
+        <tr>
+          <td><strong>WBC・好中球・PLT</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↓ 骨髄抑制</td>
+          <td>最重大。WBC&lt;3,000・PLT&lt;50,000は禁忌水準・緊急報告</td>
+        </tr>
+        <tr>
+          <td><strong>MCV</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ 大球性変化</td>
+          <td>葉酸拮抗の早期指標。骨髄抑制に先行することがある</td>
+        </tr>
+        <tr>
+          <td><strong>AST・ALT・ALP</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ 肝障害</td>
+          <td>基準値上限2倍超が減量・中止検討の目安。飲酒との相乗に注意</td>
+        </tr>
+        <tr>
+          <td><strong>アルブミン</strong></td>
+          <td><span class="both">効果＋安全</span></td>
+          <td>↓ 低下で毒性増強</td>
+          <td>&lt;3.0 g/dL は慎重投与水準。遊離型MTX増加 → 全副作用増悪</td>
+        </tr>
+        <tr>
+          <td><strong>Cr・eGFR</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ ↓ 腎機能低下</td>
+          <td>MTX蓄積の引き金。GFR&lt;30 は禁忌水準・緊急報告</td>
+        </tr>
+        <tr>
+          <td><strong>HBs抗原・HBV-DNA等</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>陽性化・上昇</td>
+          <td>HBV再活性化モニタリング。投与中・投与後も継続</td>
+        </tr>
+        <tr>
+          <td><strong>KL-6・SP-D</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ 肺障害で上昇</td>
+          <td>参考指標（単独で判断しない）。症状・画像と組合せて報告</td>
+        </tr>
+        <tr>
+          <td><strong>β-Dグルカン</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ 真菌感染で上昇</td>
+          <td>ニューモシスティス肺炎の鑑別に。発熱・呼吸器症状時に有用</td>
+        </tr>
+        <tr>
+          <td><strong>sIL-2R</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ LPDで高値</td>
+          <td>炎症との乖離（関節炎鎮静化なのにsIL-2R高値）がLPDの手がかり</td>
+        </tr>
+        <tr>
+          <td><strong>LDH</strong></td>
+          <td><span class="side">副作用</span></td>
+          <td>↑ LPD・肝障害</td>
+          <td>sIL-2R・CBC異常と組合せて悪性リンパ腫の補助指標</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;font-size:11px;color:var(--ink-muted);">
+      <span style="color:var(--accent);font-weight:700;">■ 効果</span> = 治療有効性の評価&emsp;
+      <span style="color:var(--warn);font-weight:700;">■ 効果＋安全</span> = 両面でのモニタリング&emsp;
+      <span style="color:var(--danger);font-weight:700;">■ 副作用</span> = 安全性モニタリング
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 5: モニタリング頻度 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag warn">SCHEDULE</span>
+    <span class="section-title">検査依頼の頻度パターン（なぜ定期的に来るか）</span>
+  </div>
+  <div class="section-body">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>時期・状況</th>
+          <th>頻度</th>
+          <th>依頼される主な検査</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>投与開始前</td>
+          <td>1回（必須）</td>
+          <td>CBC・肝腎機能・尿・RF・HBV/HCV・結核スクリーニング・胸部X線・関節X線</td>
+        </tr>
+        <tr>
+          <td>開始・増量後3カ月以内</td>
+          <td>2〜4週ごと</td>
+          <td>CBC（白血球分画・MCV含む）・CRP・ESR・AST・ALT・ALP・アルブミン・BUN・Cr・eGFR・尿一般</td>
+        </tr>
+        <tr>
+          <td>安定期（3カ月以降）</td>
+          <td>3カ月ごと</td>
+          <td>同上（頻度が落ちる）</td>
+        </tr>
+        <tr>
+          <td>MMP-3</td>
+          <td>12週ごと（算定制限）</td>
+          <td>滑膜炎活動性評価</td>
+        </tr>
+        <tr>
+          <td>RF・抗CCP抗体</td>
+          <td>24〜52週ごと</td>
+          <td>免疫学的評価</td>
+        </tr>
+        <tr>
+          <td>胸部X線</td>
+          <td>年1回</td>
+          <td>間質性肺炎・感染症のスクリーニング</td>
+        </tr>
+        <tr>
+          <td>関節X線</td>
+          <td>年1回程度</td>
+          <td>骨破壊進行の評価</td>
+        </tr>
+        <tr>
+          <td>HBVキャリア・既往感染者</td>
+          <td>投与中〜終了後も継続</td>
+          <td>HBV-DNA・肝機能・HBs抗原のモニタリング</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="keypoint" style="margin-top:12px;">
+      <div class="kp-label">SCHEDULING NOTE</div>
+      定期依頼が突然途絶えた場合、MTXの休薬・中止・他薬への切替が行われた可能性がある。継続して依頼が来るうちは週1回間欠投与が続いていると考えてよい。
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SECTION 6: 出典 ===== -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag neutral">SOURCE</span>
+    <span class="section-title">出典一覧</span>
+  </div>
+  <div class="section-body">
+    <ul class="source-list">
+      <li>リウマトレックスカプセル2mg 医薬品インタビューフォーム 第4版（2024年2月改訂）、ファイザー株式会社 ／ PMDA公開（672212_3999016M1021_3_1F）</li>
+      <li>リウマトレックスカプセル2mg 添付文書（電子添文）、PMDA、2024年2月改訂</li>
+      <li>関節リウマチにおけるメトトレキサート（MTX）使用と診療の手引き 2023年版【簡易版】、日本リウマチ学会MTX診療ガイドライン小委員会（https://www.ryumachi-jp.com/pdf/MTX2023_kannibann_final.pdf）</li>
+      <li>安田智弘・小原周「関節リウマチにおける血清MMP-3値の臨床的意義」、臨床リウマチ Vol.24 No.2、昭和大学藤が丘病院整形外科</li>
+      <li>大阪大学 呼吸器・免疫内科学 MTX適正使用情報 Vol.18 解説（http://www.imed3.med.osaka-u.ac.jp/disease/d-immu09-4.html）</li>
+      <li>日本呼吸器学会「薬剤性肺障害の診断・治療の手引き2013」（MTX肺炎のリスク因子・発症時期データ）</li>
+      <li>Ann Intern Med 1997;127:356-64（MTX肺炎リスク因子の論文）</li>
+      <li>ノバルティスファーマ「MTXによる副作用マネジメント（LPD編）」ゼルヤンツ医療関係者向け資料</li>
+    </ul>
+    <p class="note" style="margin-top:10px;">本資料は公開情報に基づく教育・参考目的のまとめです。個別の医療判断は必ず添付文書・主治医指示に従ってください。</p>
+  </div>
+</div>
+
+</body>
+</html>
